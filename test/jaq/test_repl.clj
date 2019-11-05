@@ -6,9 +6,9 @@
 
 (deftest test-input
   (let [input ":foo"
-        {:keys [value]} (repl/repl {:input input})]
+        {:keys [val]} (repl/repl {:input input})]
     (testing "input"
-      (is (= value input)))))
+      (is (= val input)))))
 
 (deftest test-exception-caught
   (repl/repl
@@ -20,7 +20,7 @@
     (repl/session-repl {:input input :session-id session-id})
     (is
      (= input
-        (:value (repl/session-repl {:session-id session-id :input "*1"}))))))
+        (:val (repl/session-repl {:session-id session-id :input "*1"}))))))
 
 (deftest test-default-session
   (let [{:keys [session-id]} (repl/session-repl {:input ":foo"})]
@@ -31,13 +31,19 @@
     (is (= (eval (read-string (str ns "/foo"))) :foo))))
 
 (deftest test-reader-opts-default
-  (let [{:keys [value]} (repl/repl {:input "#?(:clj :foo)"})]
-    (is (= value ":foo"))))
+  (let [{:keys [val]} (repl/repl {:input "#?(:clj :foo)"})]
+    (is (= val ":foo"))))
 
 (deftest test-reader-conditional
-  (let [{:keys [value]} (repl/repl {:input "#?(:clj :foo)"
-                                    :reader-opts {}})]
-    (is (string/includes? value "RuntimeException"))))
+  (let [{:keys [val exception]} (repl/repl {:input "#?(:clj :foo)"
+                                            :reader-opts {}})]
+    (is
+     (and (string/includes? val "RuntimeException")
+          exception))))
+
+(deftest test-ms
+  (let [{:keys [ms]} (repl/repl {:input "(Thread/sleep 100)"})]
+    (is (> ms 0))))
 
 (defn -main [& args]
   (run-tests 'jaq.test-repl))

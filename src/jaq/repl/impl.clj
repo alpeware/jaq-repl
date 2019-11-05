@@ -34,16 +34,25 @@
    (main/with-bindings
      (with-bindings bindings
        (try
-         (let [form (read-string reader-opts input)
-               value (eval form)]
+         (let [start (System/nanoTime)
+               form (read-string reader-opts input)
+               value (eval form)
+               ms (quot (- (System/nanoTime) start) 1000000)]
            (set! *3 *2)
            (set! *2 *1)
            (set! *1 value)
-           {:value (pr-str value) :ns (symbol (str *ns*))
+           {:tag :ret
+            :val (pr-str value)
+            :ns (str (.name *ns*))
+            :ms ms
+            :form form
             :bindings (get-thread-bindings)})
          (catch Throwable e
            (set! *e e)
-           {:value (repl-caught e) :ns (symbol (str *ns*))
+           {:tag :ret
+            :val (repl-caught e)
+            :ns (str (.name *ns*))
+            :exception true
             :bindings (get-thread-bindings)}))))
    (merge m)))
 
