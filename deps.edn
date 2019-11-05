@@ -1,0 +1,6 @@
+{:paths ["src"]
+ :mvn/local-repo "./.m2"
+ :deps {org.clojure/clojure {:mvn/version "1.10.1"}}
+ :aliases {:test
+           {:extra-paths ["test"]
+            :main-opts ["-m" "jaq.test-repl"]}}}
