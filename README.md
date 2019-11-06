@@ -12,7 +12,7 @@ per client. This is not suitable for most Cloud based deployments.
 Use in ```deps.edn``` -
 
 ```
-{com.alpeware/jaq-services {:git/url "https://github.com/alpeware/jaq-repl"
+{com.alpeware/jaq-repl {:git/url "https://github.com/alpeware/jaq-repl"
                             :sha "LATEST SHA"}}
 ```
 
