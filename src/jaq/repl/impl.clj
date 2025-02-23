@@ -38,6 +38,7 @@
                form (read-string reader-opts input)
                value (eval form)
                ms (quot (- (System/nanoTime) start) 1000000)]
+           (set! *e nil)
            (set! *3 *2)
            (set! *2 *1)
            (set! *1 value)
